@@ -3,491 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zero Suite — Secrets, deploys, costs, logs</title>
-<meta name="description" content="Four developer tools in one CLI. Encrypted secrets vault, deploy management, AI cost tracking, and log tailing — local-first and MCP-native.">
+<title>Zero Suite — Coming Soon</title>
+<meta name="description" content="Secrets, deploys, costs, and logs. One CLI. Coming soon.">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
   --black: #060608;
   --surface: #0c0c10;
-  --raised: #111118;
   --line: #1a1a28;
   --line2: #222233;
   --text: #c8c8d8;
   --sub: #5a5a7a;
-  --dim: #2e2e48;
   --white: #eeeef4;
   --indigo: #5b5ef4;
   --green: #1db954;
-  --amber: #e8a320;
-  --red: #e84040;
-  --teal: #0ea5b0;
 }
-
-html { scroll-behavior: smooth; color-scheme: dark; }
+html, body { height: 100%; }
 body {
   background: var(--black);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-code, kbd, pre { font-family: 'Berkeley Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; }
-
-/* ─────────── NAV ─────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 99;
-  height: 52px;
-  display: flex; align-items: center; padding: 0 28px; gap: 24px;
-  background: rgba(6,6,8,0.88);
-  backdrop-filter: blur(20px) saturate(150%);
-  border-bottom: 1px solid var(--line);
-}
-.logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--white); letter-spacing: -0.3px; }
-.logo-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--indigo); display: grid; place-items: center; font-size: 13px; font-weight: 900; color: #fff; flex-shrink: 0; }
-.nav-links { margin-left: auto; display: flex; align-items: center; gap: 2px; }
-.nav-links a { font-size: 13px; color: var(--sub); padding: 5px 12px; border-radius: 6px; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta { background: var(--white) !important; color: var(--black) !important; font-weight: 600 !important; }
-.nav-cta:hover { background: #d8d8e8 !important; }
-
-/* ─────────── HERO ─────────── */
-.hero {
-  padding: 130px 28px 0;
-  max-width: 1000px; margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 24px;
   text-align: center;
 }
-.hero h1 {
-  font-size: clamp(44px, 7vw, 76px);
+.logo-mark {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--indigo);
+  display: grid; place-items: center;
+  font-size: 24px; font-weight: 900; color: #fff;
+  margin: 0 auto 32px;
+}
+h1 {
+  font-size: clamp(36px, 6vw, 60px);
   font-weight: 800;
-  letter-spacing: -3.5px;
-  line-height: 1.0;
+  letter-spacing: -2.5px;
+  line-height: 1.05;
   color: var(--white);
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
-.hero h1 .faint { color: var(--sub); }
-.hero-sub {
-  font-size: 18px;
+h1 em { font-style: normal; color: var(--sub); }
+p {
+  font-size: 17px;
   color: var(--sub);
-  max-width: 480px;
-  margin: 0 auto 36px;
+  max-width: 400px;
   line-height: 1.65;
-  font-weight: 400;
-  letter-spacing: -0.2px;
+  margin-bottom: 40px;
 }
-.install {
-  display: inline-flex; align-items: center; gap: 14px;
-  background: var(--surface); border: 1px solid var(--line2);
-  border-radius: 10px; padding: 12px 18px;
-  font-size: 13px; margin-bottom: 12px;
+.form {
+  display: flex;
+  gap: 8px;
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto 16px;
 }
-.install code { color: var(--green); }
-.copy-btn {
-  background: var(--raised); border: 1px solid var(--line2);
-  color: var(--sub); font-size: 11px; padding: 4px 10px;
-  border-radius: 5px; cursor: pointer; font-family: inherit;
-  transition: color 0.1s;
-}
-.copy-btn:hover { color: var(--text); }
-.hero-note { font-size: 12px; color: var(--dim); margin-bottom: 64px; }
-.hero-note a { color: var(--sub); text-decoration: underline; text-underline-offset: 3px; }
-
-/* ─────────── PRODUCT WINDOW ─────────── */
-.window {
-  max-width: 860px; margin: 0 auto 0;
-  border: 1px solid var(--line2);
-  border-bottom: none;
-  border-radius: 14px 14px 0 0;
-  overflow: hidden;
+.form input {
+  flex: 1;
   background: var(--surface);
+  border: 1px solid var(--line2);
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: var(--white);
+  font-family: inherit;
+  outline: none;
 }
-.window-bar {
-  background: var(--raised);
-  border-bottom: 1px solid var(--line);
-  padding: 12px 16px;
-  display: flex; align-items: center; gap: 8px;
+.form input::placeholder { color: var(--sub); }
+.form input:focus { border-color: var(--indigo); }
+.form button {
+  background: var(--indigo);
+  border: none;
+  border-radius: 8px;
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s;
 }
-.wb { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-.wb-r { background: #ff5f57; } .wb-y { background: #febc2e; } .wb-g { background: #28c840; }
-.win-title { margin-left: 4px; font-size: 11px; color: var(--sub); letter-spacing: 0.3px; }
-.win-tabs { margin-left: auto; display: flex; gap: 2px; }
-.win-tab { font-size: 11px; padding: 3px 10px; border-radius: 5px; color: var(--sub); cursor: pointer; }
-.win-tab.on { background: var(--line); color: var(--text); }
-.win-body { padding: 20px 22px; font-size: 12.5px; line-height: 1.85; }
-.win-body pre { white-space: pre-wrap; }
-.p { color: var(--dim); }
-.k { color: #8b8bfa; }
-.v { color: #6dd8e8; }
-.s { color: var(--green); }
-.w { color: var(--amber); }
-.e { color: var(--red); }
-.m { color: #b899f8; }
-.c { color: var(--sub); }
-.tab-panel { display: none; }
-.tab-panel.on { display: block; }
-
-/* ─────────── DIVIDER ─────────── */
-.rule { border: none; border-top: 1px solid var(--line); margin: 0; }
-
-/* ─────────── SUITE STRIP ─────────── */
+.form button:hover { background: #4a4de0; }
+.note { font-size: 12px; color: var(--sub); margin-bottom: 48px; }
 .suite {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-top: 1px solid var(--line);
+  padding-top: 40px;
+  max-width: 600px;
+  width: 100%;
 }
-.suite-col {
-  padding: 36px 28px;
-  border-right: 1px solid var(--line);
-}
-.suite-col:last-child { border-right: none; }
-.suite-n { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
-.suite-name { font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: -0.5px; margin-bottom: 4px; }
-.suite-cmd { font-size: 11px; color: var(--indigo); font-family: monospace; margin-bottom: 10px; opacity: 0.9; }
-.suite-body { font-size: 13px; color: var(--sub); line-height: 1.55; }
+.suite-item { text-align: left; }
+.suite-n { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--sub); margin-bottom: 4px; }
+.suite-name { font-size: 13px; font-weight: 700; color: var(--white); }
+.suite-cmd { font-size: 11px; color: var(--indigo); font-family: 'SF Mono', monospace; }
+footer { margin-top: 48px; font-size: 12px; color: var(--sub); }
 
-/* ─────────── CONTENT SECTIONS ─────────── */
-.wrap { max-width: 1000px; margin: 0 auto; padding: 0 28px; }
-.sect { padding: 96px 0; }
-.sect + .rule { }
-.tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--indigo); margin-bottom: 14px; }
-.sect h2 {
-  font-size: clamp(30px, 4vw, 46px);
-  font-weight: 800; letter-spacing: -2px;
-  color: var(--white); line-height: 1.1;
-  max-width: 600px; margin-bottom: 14px;
-}
-.sect-sub { font-size: 16px; color: var(--sub); max-width: 440px; line-height: 1.65; margin-bottom: 48px; letter-spacing: -0.2px; }
-
-/* two-col feature layout */
-.feat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.feat { background: var(--black); padding: 28px 28px; }
-.feat h3 { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; letter-spacing: -0.3px; }
-.feat p { font-size: 13px; color: var(--sub); line-height: 1.6; }
-
-/* Providers list */
-.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 28px; }
-.chip { font-size: 12px; color: var(--sub); background: var(--surface); border: 1px solid var(--line2); border-radius: 20px; padding: 4px 12px; }
-
-/* ─────────── PRICING ─────────── */
-.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 48px; }
-.plan { background: var(--black); padding: 32px 28px; position: relative; }
-.plan.hi { background: var(--surface); }
-.plan-hi-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--indigo); }
-.plan-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sub); margin-bottom: 12px; }
-.plan-price { font-size: 48px; font-weight: 900; letter-spacing: -3px; color: var(--white); line-height: 1; }
-.plan-price sup { font-size: 22px; vertical-align: 8px; letter-spacing: 0; font-weight: 700; }
-.plan-cycle { font-size: 13px; color: var(--sub); margin: 8px 0 24px; }
-.plan-list { list-style: none; margin-bottom: 28px; }
-.plan-list li { font-size: 13px; color: var(--sub); padding: 4px 0; display: flex; gap: 10px; align-items: flex-start; }
-.plan-list li .ic { width: 14px; flex-shrink: 0; margin-top: 2px; font-style: normal; }
-.plan-list li.on .ic { color: var(--green); }
-.plan-list li.off .ic { color: var(--dim); }
-.plan-list li.on { color: var(--text); }
-.plan-btn { display: block; width: 100%; text-align: center; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--line2); color: var(--sub); background: transparent; transition: all 0.15s; }
-.plan-btn:hover { border-color: var(--sub); color: var(--text); }
-.plan-btn.hi { background: var(--indigo); border-color: var(--indigo); color: #fff; }
-.plan-btn.hi:hover { background: #4a4de0; }
-
-/* ─────────── FOOTER ─────────── */
-footer { border-top: 1px solid var(--line); padding: 28px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--sub); flex-wrap: wrap; gap: 10px; }
-footer a { color: var(--sub); margin-left: 18px; }
-footer a:hover { color: var(--text); }
-
-@media (max-width: 720px) {
-  .suite { grid-template-columns: 1fr 1fr; }
-  .suite-col { border-right: none; border-bottom: 1px solid var(--line); }
-  .suite-col:nth-child(even) { border-left: 1px solid var(--line); }
-  .feat-row { grid-template-columns: 1fr; }
-  .plans { grid-template-columns: 1fr; }
-  .win-tabs { display: none; }
-  nav .nav-links a:not(.nav-cta) { display: none; }
-}
+/* success state */
+.success { display: none; font-size: 14px; color: var(--green); margin-bottom: 16px; }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">
-    <div class="logo-mark">Z</div>
-    Zero Suite
-  </div>
-  <div class="nav-links">
-    <a href="#vault">Vault</a>
-    <a href="#deploy">Deploy</a>
-    <a href="#spend">Spend</a>
-    <a href="#logs">Logs</a>
-    <a href="#pricing">Pricing</a>
-    <a href="https://github.com/zero-suite/zero" target="_blank" class="nav-cta">Download</a>
-  </div>
-</nav>
+<div class="logo-mark">Z</div>
 
-<!-- HERO -->
-<div class="hero">
-  <h1>Secrets, deploys, costs,<br><span class="faint">and logs.</span></h1>
-  <p class="hero-sub">Four tools for the developer running multiple products. Local-first. MCP-native for Claude Code and Cursor.</p>
-  <div>
-    <div class="install">
-      <code>curl -fsSL https://zerosuite.app/install | bash</code>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://zerosuite.app/install | bash');this.textContent='Copied!'">Copy</button>
-    </div>
-  </div>
-  <p class="hero-note">Free for personal use &nbsp;·&nbsp; <a href="https://github.com/zero-suite/zero/releases">Binary releases</a> for macOS, Linux, Windows</p>
-</div>
+<h1>Secrets, deploys, costs,<br><em>and logs.</em></h1>
+<p>Four developer tools in one CLI. Local-first and MCP-native for Claude Code and Cursor. Launching soon.</p>
 
-<!-- PRODUCT WINDOW -->
-<div class="wrap">
-  <div class="window">
-    <div class="window-bar">
-      <span class="wb wb-r"></span><span class="wb wb-y"></span><span class="wb wb-g"></span>
-      <span class="win-title">Zero Suite</span>
-      <div class="win-tabs">
-        <span class="win-tab on" onclick="tab(0)">vault</span>
-        <span class="win-tab" onclick="tab(1)">deploy</span>
-        <span class="win-tab" onclick="tab(2)">spend</span>
-        <span class="win-tab" onclick="tab(3)">logs</span>
-      </div>
-    </div>
-    <div class="win-body">
-      <div class="tab-panel on" id="t0"><pre>
-<span class="p">$</span> <span class="k">vz import</span> .env.production
-<span class="s">✓ 12 secrets</span>  <span class="m">Anthropic  Supabase  Clerk  Stripe  Convex  Resend</span>
+<form class="form" onsubmit="notify(event)">
+  <input type="email" placeholder="your@email.com" required id="email">
+  <button type="submit">Notify me</button>
+</form>
+<div class="success" id="success">✓ You're on the list.</div>
+<p class="note">Early access. No spam.</p>
 
-<span class="p">$</span> <span class="k">vz env</span> --framework expo
-<span class="s">✓ .env written</span>
-  <span class="w">NEXT_PUBLIC_SUPABASE_URL  →  EXPO_PUBLIC_SUPABASE_URL</span>
-  <span class="w">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY  →  EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY</span>
-
-<span class="p">$</span> <span class="k">vz health</span>
-<span class="s">95 / 100   A   12 secrets encrypted   0 overdue</span>
-
-<span class="p">$</span> <span class="k">vz scan</span> ./src
-<span class="e">⚠  CRITICAL   Stripe key in src/old-config.js:14  →  rotate immediately</span>
-
-<span class="p">$</span> <span class="k">vz agent create</span> claude-code --keys ANTHROPIC_API_KEY --ttl 8
-<span class="s">✓ Agent created  ·  2 of 12 secrets visible  ·  expires in 8h</span>
-<span class="c">  Stripe, Clerk, Convex → not in scope</span></pre>
-      </div>
-      <div class="tab-panel" id="t1"><pre>
-<span class="p">$</span> <span class="k">deploy-zero deploy</span> --app subscription-exit-ai --provider coolify --env production
-<span class="s">✓ Deploying a3f9b2c  →  production</span>
-<span class="s">✓ Live in 48s  →  https://sub.badgpt.ai</span>
-
-<span class="p">$</span> <span class="k">deploy-zero rollback</span> --app badgpt-landing --provider vercel
-<span class="s">✓ Rolled back to previous</span>
-
-<span class="c">  Or tell Claude Code: "Deploy to production on Coolify"</span>
-<span class="c">  → deploy-zero-mcp handles auth, triggers build, reports status</span></pre>
-      </div>
-      <div class="tab-panel" id="t2"><pre>
-<span class="p">$</span> <span class="k">spend-zero</span> --month
-
-Provider       Model                    Cost
-<span class="c">────────────────────────────────────────────</span>
-<span class="m">Anthropic</span>      claude-3-7-sonnet        <span class="s">$4.82</span>
-<span class="m">OpenAI</span>         gpt-4o                   <span class="s">$1.20</span>
-<span class="m">Groq</span>           llama-3.3-70b            <span class="s">$0.08</span>
-<span class="c">────────────────────────────────────────────</span>
-<span class="v">Total</span>                                   <span class="s">$6.10</span>  <span class="c">of $50 budget (12%)</span></pre>
-      </div>
-      <div class="tab-panel" id="t3"><pre>
-<span class="p">$</span> <span class="k">log-zero tail</span> subscription-exit-ai --level error
-
-<span class="c">03:15:22</span>  <span class="e">ERROR</span>  Plaid webhook: signature mismatch
-<span class="c">03:18:01</span>  <span class="e">ERROR</span>  Convex mutation timeout after 5000ms
-<span class="c">03:21:44</span>  <span class="e">ERROR</span>  Rate limit exceeded: user_2abc123
-
-<span class="c">  Ask Claude Code: "Why is production throwing errors?"</span>
-<span class="c">  → log-zero-mcp fetches the last hour across all your apps</span></pre>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SUITE STRIP -->
 <div class="suite">
-  <div class="suite-col">
+  <div class="suite-item">
     <div class="suite-n">01</div>
     <div class="suite-name">Vault Zero</div>
-    <div class="suite-cmd">vz &nbsp;·&nbsp; vault-zero-mcp</div>
-    <div class="suite-body">Encrypted secrets. Framework-aware .env generation. Agent scoping.</div>
+    <div class="suite-cmd">vz · vault-zero-mcp</div>
   </div>
-  <div class="suite-col">
+  <div class="suite-item">
     <div class="suite-n">02</div>
     <div class="suite-name">Deploy Zero</div>
-    <div class="suite-cmd">deploy-zero &nbsp;·&nbsp; deploy-zero-mcp</div>
-    <div class="suite-body">Trigger and monitor deploys across ten platforms from one CLI.</div>
+    <div class="suite-cmd">deploy-zero · mcp</div>
   </div>
-  <div class="suite-col">
+  <div class="suite-item">
     <div class="suite-n">03</div>
     <div class="suite-name">Spend Zero</div>
-    <div class="suite-cmd">spend-zero &nbsp;·&nbsp; spend-zero-mcp</div>
-    <div class="suite-body">AI cost tracking across 15 providers. Budget alerts. Ask Claude.</div>
+    <div class="suite-cmd">spend-zero · mcp</div>
   </div>
-  <div class="suite-col">
+  <div class="suite-item">
     <div class="suite-n">04</div>
     <div class="suite-name">Log Zero</div>
-    <div class="suite-cmd">log-zero &nbsp;·&nbsp; log-zero-mcp</div>
-    <div class="suite-body">Unified log tailing from Axiom, Datadog, Sentry, Vercel, Railway.</div>
+    <div class="suite-cmd">log-zero · mcp</div>
   </div>
 </div>
 
-<!-- VAULT SECTION -->
-<div class="rule"></div>
-<div class="wrap">
-  <div class="sect" id="vault">
-    <div class="tag">Vault Zero</div>
-    <h2>One vault for every API key you own</h2>
-    <p class="sect-sub">Unlock once. Generate .env files for any project in any framework. Your secrets never leave your machine.</p>
-    <div class="feat-row">
-      <div class="feat">
-        <h3>Framework-aware naming</h3>
-        <p>The same key gets the right prefix automatically. <code>NEXT_PUBLIC_*</code> becomes <code>EXPO_PUBLIC_*</code> or <code>VITE_*</code> depending on your project. No manual renaming.</p>
-      </div>
-      <div class="feat">
-        <h3>Agent identity scoping</h3>
-        <p>Create a time-limited credential set for Claude Code or Cursor. Your Stripe key stays invisible. The .env expires automatically.</p>
-      </div>
-      <div class="feat">
-        <h3>Secret scanner</h3>
-        <p>Scans your code and git history for leaked keys. 60+ patterns. Exits with code 1 — CI fails automatically if you commit a secret.</p>
-      </div>
-      <div class="feat">
-        <h3>Team sync</h3>
-        <p>Encrypted vault shared via any git remote. Your git host never sees plaintext secrets. Works with GitHub, GitLab, or self-hosted.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- DEPLOY SECTION -->
-<div class="rule"></div>
-<div class="wrap">
-  <div class="sect" id="deploy">
-    <div class="tag">Deploy Zero</div>
-    <h2>Deploy from the terminal.<br>Or let your AI agent do it.</h2>
-    <p class="sect-sub">Ten platforms. The MCP server gives Claude Code or Cursor the ability to trigger deploys directly — no browser, no copy-pasting tokens.</p>
-    <div class="chips">
-      <span class="chip">Vercel</span><span class="chip">Coolify</span><span class="chip">Railway</span>
-      <span class="chip">Render</span><span class="chip">Fly.io</span><span class="chip">Netlify</span>
-      <span class="chip">Cloudflare Pages</span><span class="chip">DigitalOcean</span>
-      <span class="chip">Heroku</span><span class="chip">GitHub Pages</span>
-    </div>
-  </div>
-</div>
-
-<!-- SPEND SECTION -->
-<div class="rule"></div>
-<div class="wrap">
-  <div class="sect" id="spend">
-    <div class="tag">Spend Zero</div>
-    <h2>Know your AI costs<br>before the invoice does.</h2>
-    <p class="sect-sub">Tracks usage and spend across 15 providers. Ask Claude Code "how much have I spent this month?" and get a real answer back from spend-zero-mcp.</p>
-    <div class="chips">
-      <span class="chip">Anthropic</span><span class="chip">OpenAI</span><span class="chip">Google Gemini</span>
-      <span class="chip">Groq</span><span class="chip">Mistral</span><span class="chip">Together AI</span>
-      <span class="chip">Replicate</span><span class="chip">Perplexity</span><span class="chip">ElevenLabs</span>
-      <span class="chip">Cohere</span><span class="chip">Fireworks</span><span class="chip">OpenRouter</span>
-      <span class="chip">Supabase</span><span class="chip">Convex</span><span class="chip">+ more</span>
-    </div>
-  </div>
-</div>
-
-<!-- LOGS SECTION -->
-<div class="rule"></div>
-<div class="wrap">
-  <div class="sect" id="logs">
-    <div class="tag">Log Zero</div>
-    <h2>All your app logs,<br>one command.</h2>
-    <p class="sect-sub">Tail and search across every platform you deploy to. The MCP server lets Claude Code read your production logs to debug issues — without you pasting stack traces.</p>
-    <div class="chips">
-      <span class="chip">Axiom</span><span class="chip">Better Stack</span><span class="chip">Datadog</span>
-      <span class="chip">Sentry</span><span class="chip">Vercel</span><span class="chip">Railway</span>
-      <span class="chip">Render</span><span class="chip">Papertrail</span>
-    </div>
-  </div>
-</div>
-
-<!-- PRICING -->
-<div class="rule"></div>
-<div class="wrap">
-  <div class="sect" id="pricing">
-    <div class="tag">Pricing</div>
-    <h2>Free to use.<br>Pay when your team grows.</h2>
-    <p class="sect-sub">The full CLI and all four MCP servers are free for personal, non-commercial use. Source-available license — audit the code, trust what you install.</p>
-    <div class="plans">
-      <div class="plan">
-        <div class="plan-label">Free</div>
-        <div class="plan-price">$0</div>
-        <div class="plan-cycle">forever</div>
-        <ul class="plan-list">
-          <li class="on"><i class="ic">✓</i> Full CLI — all four tools</li>
-          <li class="on"><i class="ic">✓</i> All 4 MCP servers</li>
-          <li class="on"><i class="ic">✓</i> Framework-aware .env gen</li>
-          <li class="on"><i class="ic">✓</i> Secret scanner + health</li>
-          <li class="on"><i class="ic">✓</i> Agent identity scoping</li>
-          <li class="on"><i class="ic">✓</i> 49 built-in providers</li>
-          <li class="off"><i class="ic">–</i> Team sync</li>
-          <li class="off"><i class="ic">–</i> GitHub Secrets sync</li>
-          <li class="off"><i class="ic">–</i> vz watch</li>
-        </ul>
-        <a href="https://github.com/zero-suite/zero/releases" class="plan-btn">Download</a>
-      </div>
-      <div class="plan hi">
-        <div class="plan-hi-bar"></div>
-        <div class="plan-label">Pro</div>
-        <div class="plan-price"><sup>$</sup>59</div>
-        <div class="plan-cycle">per year &nbsp;·&nbsp; $149 lifetime</div>
-        <ul class="plan-list">
-          <li class="on"><i class="ic">✓</i> Everything in Free</li>
-          <li class="on"><i class="ic">✓</i> Team sync (up to 5 people)</li>
-          <li class="on"><i class="ic">✓</i> GitHub Secrets sync</li>
-          <li class="on"><i class="ic">✓</i> vz watch — auto .env refresh</li>
-          <li class="on"><i class="ic">✓</i> Spend alerts + budget limits</li>
-          <li class="on"><i class="ic">✓</i> Priority support</li>
-          <li class="off"><i class="ic">–</i> RBAC</li>
-          <li class="off"><i class="ic">–</i> Slack alerts</li>
-          <li class="off"><i class="ic">–</i> Audit log export</li>
-        </ul>
-        <a href="https://klogw.lemonsqueezy.com/checkout/buy/724990da-31ed-4bf3-92ec-669fa011546f" class="plan-btn hi">Get Pro</a>
-      </div>
-      <div class="plan">
-        <div class="plan-label">Team</div>
-        <div class="plan-price"><sup>$</sup>149</div>
-        <div class="plan-cycle">per year &nbsp;·&nbsp; $249 lifetime</div>
-        <ul class="plan-list">
-          <li class="on"><i class="ic">✓</i> Everything in Pro</li>
-          <li class="on"><i class="ic">✓</i> Up to 20 team members</li>
-          <li class="on"><i class="ic">✓</i> Role-based access</li>
-          <li class="on"><i class="ic">✓</i> Slack spend alerts</li>
-          <li class="on"><i class="ic">✓</i> Audit log export</li>
-          <li class="on"><i class="ic">✓</i> Priority support</li>
-        </ul>
-        <a href="https://klogw.lemonsqueezy.com/checkout/buy/d2811ee1-d2da-41ea-a2a5-cf0100220235" class="plan-btn">Get Team</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <div style="display:flex;align-items:center;gap:7px;font-weight:600;color:var(--text)">
-    <div style="width:20px;height:20px;border-radius:5px;background:var(--indigo);display:grid;place-items:center;font-size:10px;font-weight:900;color:#fff">Z</div>
-    Zero Suite
-  </div>
-  <div>
-    <a href="https://github.com/zero-suite/zero" target="_blank">GitHub</a>
-    <a href="https://github.com/zero-suite/zero/releases" target="_blank">Releases</a>
-    <a href="https://github.com/zero-suite/providers" target="_blank">Providers</a>
-    <a href="mailto:hello@zerosuite.app">Contact</a>
-  </div>
-</footer>
+<footer>zerosuite.app</footer>
 
 <script>
-function tab(i) {
-  document.querySelectorAll('.win-tab').forEach((t,j) => t.classList.toggle('on', i===j));
-  document.querySelectorAll('.tab-panel').forEach((p,j) => p.classList.toggle('on', i===j));
+function notify(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  // Store locally for now — swap in a Resend/Supabase call when ready
+  fetch('https://api.zerosuite.app/waitlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  }).catch(() => {});
+  document.querySelector('.form').style.display = 'none';
+  document.querySelector('.note').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
 }
 </script>
+
 </body>
 </html>
