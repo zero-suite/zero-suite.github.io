@@ -3,384 +3,437 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zero Suite — Encrypted secrets vault for AI-native builders</title>
-<meta name="description" content="One encrypted vault for all your API keys. Auto-generates .env files for any framework. MCP-native — Claude Code and Cursor can manage your secrets directly.">
-<meta property="og:title" content="Zero Suite — Secrets vault for AI-native builders">
-<meta property="og:description" content="One encrypted vault. Framework-aware .env generation. MCP-native for Claude Code and Cursor.">
-<meta property="og:image" content="https://zerosuite.app/og.png">
+<title>Zero Suite</title>
+<meta name="description" content="Secrets vault, deploy, spend tracking, and log tailing — local-first, MCP-native.">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--purple:#6366f1;--purple-light:#818cf8;--purple-dark:#4f46e5;--bg:#0a0a0f;--bg2:#0f0f1a;--bg3:#141420;--border:#1e293b;--text:#e2e8f0;--muted:#64748b;--green:#4ade80;--yellow:#fbbf24}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.6}
-a{color:var(--purple-light);text-decoration:none}
-code,pre{font-family:'SF Mono','Fira Code',monospace}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Nav */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;display:flex;align-items:center;gap:32px;background:rgba(10,10,15,0.8);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,41,59,0.5)}
-.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--text)}
-.nav-logo .icon{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--purple),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff}
-nav .links{display:flex;gap:24px;margin-left:auto;align-items:center}
-nav .links a{font-size:14px;color:var(--muted);transition:color 0.15s}
-nav .links a:hover{color:var(--text)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;text-decoration:none}
-.btn-primary{background:var(--purple);color:#fff}
-.btn-primary:hover{background:var(--purple-dark);color:#fff}
-.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:#475569;background:var(--bg3)}
+:root {
+  --bg: #080810;
+  --bg1: #0e0e1a;
+  --bg2: #13131f;
+  --border: #1c1c2e;
+  --border2: #252535;
+  --text: #d4d4e8;
+  --muted: #52527a;
+  --dim: #35355a;
+  --indigo: #6366f1;
+  --indigo-bright: #818cf8;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --teal: #14b8a6;
+}
 
-/* Hero */
-.hero{padding:140px 40px 80px;text-align:center;max-width:800px;margin:0 auto}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);color:var(--purple-light);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:28px}
-.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
-h1{font-size:clamp(36px,6vw,64px);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:20px;color:#f8fafc}
-h1 span{background:linear-gradient(135deg,var(--purple-light),#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 36px;line-height:1.7}
-.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
-.hero-cta .btn{font-size:15px;padding:12px 24px}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+code, pre { font-family: 'Berkeley Mono', 'SF Mono', 'Fira Code', monospace; }
 
-/* Install block */
-.install-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:inline-flex;align-items:center;gap:12px;font-size:14px;max-width:100%}
-.install-block code{color:var(--green);font-size:13px}
-.install-block .copy-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
-.install-block .copy-btn:hover{color:var(--text)}
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 99;
+  height: 56px; padding: 0 32px;
+  display: flex; align-items: center; gap: 32px;
+  background: rgba(8,8,16,0.85); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 16px; letter-spacing: -0.3px; }
+.nav-logo { width: 28px; height: 28px; border-radius: 7px; background: var(--indigo); display: grid; place-items: center; font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0; }
+.nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.nav-links a { font-size: 13px; color: var(--muted); padding: 5px 10px; border-radius: 6px; transition: color 0.1s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links .cta { background: var(--indigo); color: #fff; padding: 6px 14px; font-weight: 600; }
+.nav-links .cta:hover { background: #4f46e5; color: #fff; }
 
-/* Terminal demo */
-.terminal{background:#0d0d14;border:1px solid var(--border);border-radius:14px;overflow:hidden;max-width:680px;margin:60px auto;text-align:left}
-.terminal-bar{padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center}
-.terminal-bar span{width:12px;height:12px;border-radius:50%}
-.t-red{background:#ff5f57}.t-yellow{background:#febc2e}.t-green{background:#28c840}
-.terminal-body{padding:20px;font-size:13px;line-height:1.8}
-.t-prompt{color:#475569}
-.t-cmd{color:var(--purple-light);font-weight:600}
-.t-out{color:#94a3b8}
-.t-success{color:var(--green)}
-.t-highlight{color:var(--yellow)}
-.t-purple{color:#c084fc}
+/* ── Hero ── */
+.hero {
+  padding: 120px 32px 80px;
+  max-width: 900px; margin: 0 auto;
+}
+.hero-eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--indigo-bright); margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(40px, 6vw, 68px);
+  font-weight: 800; letter-spacing: -3px; line-height: 1.05;
+  color: #eeeef8; margin-bottom: 24px;
+}
+.hero h1 em { font-style: normal; color: var(--muted); }
+.hero-sub {
+  font-size: 18px; color: var(--muted); max-width: 520px;
+  line-height: 1.7; margin-bottom: 36px;
+}
+.hero-sub strong { color: var(--text); font-weight: 500; }
 
-/* Features */
-.section{padding:80px 40px;max-width:1100px;margin:0 auto}
-.section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--purple-light);margin-bottom:12px}
-.section h2{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;color:#f8fafc}
-.section > p{font-size:17px;color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:48px}
-.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.feature{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
-.feature .icon{font-size:24px;margin-bottom:12px}
-.feature h3{font-size:16px;font-weight:700;color:#f1f5f9;margin-bottom:8px}
-.feature p{font-size:14px;color:var(--muted);line-height:1.6}
+.install-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.install-cmd {
+  background: var(--bg1); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 10px 16px;
+  font-size: 13px; color: var(--green);
+  display: flex; align-items: center; gap: 12px;
+}
+.copy { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-family: inherit; }
+.copy:hover { color: var(--text); }
+.hero-note { font-size: 12px; color: var(--dim); }
+.hero-note a { color: var(--indigo-bright); text-decoration: underline; }
 
-/* MCP section */
-.mcp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.mcp-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px}
-.mcp-card h3{font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
-.mcp-card p{font-size:13px;color:var(--muted);margin-bottom:12px}
-.mcp-card pre{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;line-height:1.7;overflow-x:auto}
-.mcp-tag{font-size:11px;background:rgba(99,102,241,0.15);color:var(--purple-light);padding:2px 8px;border-radius:4px;font-weight:600;margin-right:6px}
+/* ── Suite overview ── */
+.suite {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.suite-item {
+  padding: 28px 24px;
+  border-right: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.suite-item:last-child { border-right: none; }
+.suite-item:hover { background: var(--bg1); }
+.suite-num { font-size: 11px; font-weight: 700; color: var(--dim); letter-spacing: 1px; margin-bottom: 10px; }
+.suite-name { font-size: 14px; font-weight: 700; color: #eeeef8; margin-bottom: 4px; }
+.suite-cmd { font-size: 12px; color: var(--indigo-bright); font-family: monospace; margin-bottom: 8px; }
+.suite-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-/* Pricing */
-.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
-.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px;position:relative}
-.price-card.featured{border-color:var(--purple);background:rgba(99,102,241,0.05)}
-.featured-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap}
-.price-name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
-.price-amount{font-size:40px;font-weight:900;color:#f8fafc;letter-spacing:-2px;line-height:1}
-.price-amount sup{font-size:20px;vertical-align:super;font-weight:700}
-.price-period{font-size:13px;color:var(--muted);margin-bottom:20px;margin-top:4px}
-.price-features{list-style:none;margin-bottom:24px}
-.price-features li{font-size:14px;color:#94a3b8;padding:5px 0;display:flex;gap:8px;align-items:flex-start}
-.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
-.price-card .btn{width:100%;justify-content:center}
+/* ── Sections ── */
+.section { padding: 88px 32px; max-width: 900px; margin: 0 auto; }
+.section + .section { padding-top: 0; }
+.label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--indigo-bright); margin-bottom: 12px; }
+.section h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -1.5px; color: #eeeef8; margin-bottom: 12px; line-height: 1.15; }
+.section > p { font-size: 16px; color: var(--muted); max-width: 500px; line-height: 1.7; margin-bottom: 40px; }
 
-/* Providers */
-.provider-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.pill{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:#94a3b8}
-.pill.cat-cost{border-color:rgba(192,132,252,0.3);color:#c084fc}
-.pill.cat-deploy{border-color:rgba(96,165,250,0.3);color:#60a5fa}
-.pill.cat-log{border-color:rgba(52,211,153,0.3);color:#34d399}
-.pill.cat-monitor{border-color:rgba(251,191,36,0.3);color:var(--yellow)}
+/* ── Terminal ── */
+.term {
+  background: var(--bg1); border: 1px solid var(--border2);
+  border-radius: 12px; overflow: hidden; margin-bottom: 20px;
+  font-size: 13px; line-height: 1.8;
+}
+.term-bar {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 10px 14px; display: flex; align-items: center; gap: 6px;
+}
+.term-bar span { width: 11px; height: 11px; border-radius: 50%; }
+.tb-r { background: #ff5f57; } .tb-y { background: #febc2e; } .tb-g { background: #28c840; }
+.term-title { margin-left: 8px; font-size: 11px; color: var(--muted); }
+.term-body { padding: 18px 20px; }
+.tc { color: var(--muted); }         /* comment */
+.tp { color: var(--dim); }           /* prompt $ */
+.tk { color: var(--indigo-bright); } /* keyword/command */
+.tv { color: #a5f3fc; }              /* value */
+.ts { color: var(--green); }         /* success */
+.tw { color: var(--amber); }         /* warning/rename */
+.te { color: var(--red); }           /* error */
+.tm { color: #c084fc; }              /* service name */
 
-/* CTA bottom */
-.cta-section{padding:80px 40px;text-align:center;border-top:1px solid var(--border)}
-.cta-section h2{font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:16px}
-.cta-section p{font-size:17px;color:var(--muted);margin-bottom:32px}
+/* ── Grid layouts ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card { background: var(--bg1); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+.card h3 { font-size: 14px; font-weight: 700; color: #eeeef8; margin-bottom: 6px; }
+.card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-/* Footer */
-footer{padding:40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted);flex-wrap:wrap;gap:12px}
-footer .links{display:flex;gap:20px}
-footer a{color:var(--muted)}
-footer a:hover{color:var(--text)}
+/* ── Pricing ── */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.plan { background: var(--bg1); border: 1px solid var(--border); border-radius: 12px; padding: 28px; position: relative; }
+.plan.hi { border-color: var(--indigo); }
+.plan-badge { position: absolute; top: -11px; left: 24px; background: var(--indigo); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+.plan-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; }
+.plan-price { font-size: 42px; font-weight: 900; letter-spacing: -2px; color: #eeeef8; line-height: 1; }
+.plan-period { font-size: 13px; color: var(--muted); margin: 6px 0 22px; }
+.plan-features { list-style: none; margin-bottom: 26px; }
+.plan-features li { font-size: 13px; color: var(--muted); padding: 4px 0; display: flex; gap: 8px; }
+.plan-features li::before { content: '—'; color: var(--border2); flex-shrink: 0; }
+.plan-features li.yes::before { content: '✓'; color: var(--green); }
+.plan-btn { display: block; width: 100%; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; background: var(--bg2); border: 1px solid var(--border2); color: var(--text); transition: all 0.15s; }
+.plan-btn:hover { border-color: var(--indigo); color: var(--indigo-bright); }
+.plan-btn.primary { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+.plan-btn.primary:hover { background: #4f46e5; }
 
-@media(max-width:768px){
-  nav .links a:not(:last-child){display:none}
-  .mcp-grid,.pricing{grid-template-columns:1fr}
-  .hero{padding:100px 20px 60px}
-  .section{padding:60px 20px}
+/* ── Footer ── */
+footer { border-top: 1px solid var(--border); padding: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+footer a { color: var(--muted); margin-left: 20px; }
+footer a:hover { color: var(--text); }
+
+@media (max-width: 768px) {
+  .suite { grid-template-columns: 1fr 1fr; }
+  .suite-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .two-col, .pricing-grid { grid-template-columns: 1fr; }
+  .nav-links a:not(.cta) { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .section { padding: 60px 20px; }
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">
-    <div class="icon">Z</div>
+  <div class="nav-brand">
+    <div class="nav-logo">Z</div>
     Zero Suite
   </div>
-  <div class="links">
-    <a href="#features">Features</a>
-    <a href="#mcp">MCP</a>
+  <div class="nav-links">
+    <a href="#vault">Vault</a>
+    <a href="#deploy">Deploy</a>
+    <a href="#spend">Spend</a>
+    <a href="#logs">Logs</a>
     <a href="#pricing">Pricing</a>
-    <a href="https://github.com/zero-suite/zero" target="_blank">GitHub</a>
-    <a href="https://github.com/zero-suite/zero/releases" class="btn btn-ghost">Download</a>
+    <a href="https://github.com/zero-suite/zero" target="_blank" class="cta">Download</a>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-badge">
-    <span class="dot"></span>
-    Free for personal use · MCP-native · Local-first
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-eyebrow">Open source · Local-first · MCP-native</div>
+  <h1>Secrets, deploys, costs,<br>and logs. <em>One CLI.</em></h1>
+  <p class="hero-sub">
+    Four tools for the developer running multiple products.
+    <strong>Your API keys stay on your machine.</strong>
+    Claude Code and Cursor use it directly via MCP.
+  </p>
+  <div class="install-row">
+    <div class="install-cmd">
+      <code>curl -fsSL https://zerosuite.app/install | bash</code>
+      <button class="copy" onclick="navigator.clipboard.writeText('curl -fsSL https://zerosuite.app/install | bash');this.textContent='Copied!'">Copy</button>
+    </div>
   </div>
-  <h1>One vault for every<br><span>API key you own</span></h1>
-  <p>Encrypted secrets vault for AI-native builders. Auto-generates framework-aware <code>.env</code> files. Integrates directly with Claude Code and Cursor via MCP.</p>
-  <div class="hero-cta">
-    <a href="#install" class="btn btn-primary">⬇ Install free</a>
-    <a href="https://github.com/zero-suite/zero" class="btn btn-ghost" target="_blank">★ Star on GitHub</a>
+  <p class="hero-note">Free forever for personal use. <a href="https://github.com/zero-suite/zero/releases">Binary releases</a> for macOS, Linux, Windows.</p>
+</div>
+
+<!-- Suite overview -->
+<div class="suite">
+  <div class="suite-item">
+    <div class="suite-num">01</div>
+    <div class="suite-name">Vault Zero</div>
+    <div class="suite-cmd">vz · vault-zero-mcp</div>
+    <div class="suite-desc">Encrypted secrets vault. Framework-aware .env generation. Agent identity scoping.</div>
   </div>
-  <div class="install-block" id="install">
-    <code>curl -fsSL https://zerosuite.app/install | bash</code>
-    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://zerosuite.app/install | bash');this.textContent='Copied!'">Copy</button>
+  <div class="suite-item">
+    <div class="suite-num">02</div>
+    <div class="suite-name">Deploy Zero</div>
+    <div class="suite-cmd">deploy-zero · deploy-zero-mcp</div>
+    <div class="suite-desc">Trigger and monitor deploys across Vercel, Coolify, Railway, Render, Fly, and more.</div>
   </div>
-</section>
-
-<div class="terminal">
-  <div class="terminal-bar">
-    <span class="t-red"></span><span class="t-yellow"></span><span class="t-green"></span>
+  <div class="suite-item">
+    <div class="suite-num">03</div>
+    <div class="suite-name">Spend Zero</div>
+    <div class="suite-cmd">spend-zero · spend-zero-mcp</div>
+    <div class="suite-desc">AI cost tracking across 15 providers. Budget alerts. Ask Claude "how much have I spent?"</div>
   </div>
-  <div class="terminal-body">
-<pre><span class="t-prompt">$ </span><span class="t-cmd">vz init</span>
-<span class="t-success">✓ Vault created at ~/.vault-zero/vault.vz</span>
-
-<span class="t-prompt">$ </span><span class="t-cmd">vz import .env.production</span>
-<span class="t-success">✓ Imported 12 secrets</span>
-  <span class="t-purple">● Anthropic</span>  <span class="t-purple">● Supabase</span>  <span class="t-purple">● Clerk</span>  <span class="t-purple">● Stripe</span>  <span class="t-purple">● Convex</span>
-
-<span class="t-prompt">$ </span><span class="t-cmd">vz env --framework expo</span>
-<span class="t-success">✓ .env written</span>
-  <span class="t-highlight">NEXT_PUBLIC_SUPABASE_URL → EXPO_PUBLIC_SUPABASE_URL</span>  <span class="t-out">(auto-renamed)</span>
-  <span class="t-highlight">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY → EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY</span>
-
-<span class="t-prompt">$ </span><span class="t-cmd">vz health</span>
-<span class="t-success">Score: 95/100 · Grade A · 12 secrets encrypted</span>
-
-<span class="t-prompt">$ </span><span class="t-cmd">vz scan ./src</span>
-<span style="color:#f87171">⚠ CRITICAL: Stripe key found in src/config.js:3 — rotate immediately</span>
-</pre>
+  <div class="suite-item">
+    <div class="suite-num">04</div>
+    <div class="suite-name">Log Zero</div>
+    <div class="suite-cmd">log-zero · log-zero-mcp</div>
+    <div class="suite-desc">Unified log tailing from Axiom, Datadog, Sentry, Vercel, Railway, Render, and Better Stack.</div>
   </div>
 </div>
 
-<section class="section" id="features">
-  <div class="section-label">Features</div>
-  <h2>Everything a solo founder needs</h2>
-  <p>Built for the developer who runs 3-10 products with 50+ API keys across dev, staging, and production.</p>
-  <div class="features">
-    <div class="feature">
-      <div class="icon">🔐</div>
-      <h3>XChaCha20 + Argon2id encryption</h3>
-      <p>Military-grade encryption. Your secrets never leave your machine unencrypted. No cloud dependency, no vendor lock-in.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">⚡</div>
-      <h3>Framework-aware .env generation</h3>
-      <p>One vault, any framework. <code>NEXT_PUBLIC_*</code> becomes <code>EXPO_PUBLIC_*</code> or <code>VITE_*</code> automatically. Works with Next.js, Expo, Vite, SvelteKit, Nuxt, Remix, Astro, and Node.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🤖</div>
-      <h3>AI Agent Identity Layer</h3>
-      <p>Give Claude Code only the keys it needs. Create scoped, time-limited credential sets per agent — Stripe stays invisible to your coding assistant.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">⚡</div>
-      <h3>Stack Bootstrap</h3>
-      <p>Tell vz your stack. It tells you exactly which secrets you have, which you're missing, and where to get them — with links.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🔍</div>
-      <h3>Secret Scanner</h3>
-      <p>Scan your entire codebase and git history for leaked credentials. 60+ patterns. Exits with code 1 so CI pipelines fail automatically.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">👥</div>
-      <h3>Team Sync</h3>
-      <p>Share encrypted vaults with your co-founders via any git remote. XChaCha20 encrypted — your git host never sees plaintext secrets.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">💊</div>
-      <h3>Vault Health Score</h3>
-      <p>A to F grade for your credential hygiene. Tracks rotation schedules, overdue keys, miscategorized publishable keys, and more.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🔄</div>
-      <h3>Rotation Tracking</h3>
-      <p>Set rotation intervals per secret. Get reminders when keys are overdue. Never get surprised by an expired API key in production again.</p>
-    </div>
-    <div class="feature">
-      <div class="icon">🔌</div>
-      <h3>49 built-in providers</h3>
-      <p>Cost tracking, deploy triggers, log tailing, and uptime monitoring across every major platform — all from one CLI.</p>
+<!-- Vault Zero -->
+<div class="section" id="vault">
+  <div class="label">01 — Vault Zero</div>
+  <h2>Stop copying .env files<br>between projects</h2>
+  <p>One encrypted vault for every API key you own. Unlock once, generate .env for any project in any framework.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="tb-r"></span><span class="tb-y"></span><span class="tb-g"></span><span class="term-title">vault demo</span></div>
+    <div class="term-body"><pre><span class="tp">$</span> <span class="tk">vz import</span> .env.production
+<span class="ts">✓ 12 secrets imported</span>
+  <span class="tm">Anthropic  Supabase  Clerk  Stripe  Convex  Resend</span>
+
+<span class="tp">$</span> <span class="tk">vz env</span> --framework expo
+<span class="ts">✓ .env written</span>
+  <span class="tw">NEXT_PUBLIC_SUPABASE_URL  →  EXPO_PUBLIC_SUPABASE_URL</span>
+  <span class="tw">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY  →  EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY</span>
+
+<span class="tp">$</span> <span class="tk">vz health</span>
+<span class="ts">Score: 95/100  Grade: A   12 secrets  0 overdue rotations</span>
+
+<span class="tp">$</span> <span class="tk">vz scan</span> ./src --critical-only
+<span class="te">⚠ CRITICAL  Stripe key in src/old-config.js:14  →  rotate now</span></pre>
     </div>
   </div>
-</section>
 
-<section class="section" id="mcp">
-  <div class="section-label">MCP Integration</div>
-  <h2>Your AI coding agent,<br>properly credentialed</h2>
-  <p>Four MCP servers ship with Zero Suite. Add them to Claude Code or Cursor and your AI can manage secrets, trigger deploys, track costs, and tail logs — all with your keys, scoped to what it needs.</p>
-  <div class="mcp-grid">
-    <div class="mcp-card">
-      <div><span class="mcp-tag">vault-zero-mcp</span></div>
-      <h3 style="margin-top:10px">Secrets &amp; Environment</h3>
-      <p>Init vault, check env, list secrets, detect stack, run doctor.</p>
-      <pre style="color:#94a3b8"><span style="color:#475569"># ~/.claude/settings.json</span>
-{
-  "mcpServers": {
-    "vault-zero": {
-      "command": "vault-zero-mcp"
-    }
-  }
-}</pre>
+  <div class="two-col">
+    <div class="card">
+      <h3>Framework-aware naming</h3>
+      <p>The same secret automatically gets the right prefix for Next.js, Expo, Vite, SvelteKit, Nuxt, Remix, Astro, or Node. No manual renaming.</p>
     </div>
-    <div class="mcp-card">
-      <div><span class="mcp-tag">deploy-zero-mcp</span></div>
-      <h3 style="margin-top:10px">Deployments</h3>
-      <p>Deploy, rollback, promote, and monitor across Vercel, Coolify, Railway, Render, Fly, and more.</p>
-      <pre style="color:#4ade80">"Deploy my app to production on Coolify"
-→ Claude deploys with your credentials
-→ No browser required</pre>
+    <div class="card">
+      <h3>Agent identity scoping</h3>
+      <p>Create a scoped, time-limited .env for Claude Code or Cursor. Your Stripe key stays invisible. Expires automatically.</p>
     </div>
-    <div class="mcp-card">
-      <div><span class="mcp-tag">spend-zero-mcp</span></div>
-      <h3 style="margin-top:10px">AI Cost Tracking</h3>
-      <p>Track spend across Anthropic, OpenAI, Groq, Gemini, Mistral, Together, and 10 more providers.</p>
-      <pre style="color:#4ade80">"How much have I spent on AI this month?"
-→ $6.10 (Anthropic $4.82, OpenAI $1.20)</pre>
+    <div class="card">
+      <h3>Secret scanner</h3>
+      <p>60+ patterns. Scans files and git history. Exits with code 1 so CI fails if you accidentally commit a key.</p>
     </div>
-    <div class="mcp-card">
-      <div><span class="mcp-tag">log-zero-mcp</span></div>
-      <h3 style="margin-top:10px">Live Logs</h3>
-      <p>Tail and search logs from Axiom, Better Stack, Datadog, Sentry, Vercel, Railway, and Render.</p>
-      <pre style="color:#4ade80">"Show me errors from the last hour"
-→ Queries your log provider automatically</pre>
+    <div class="card">
+      <h3>Team sync</h3>
+      <p>Encrypted vault shared via any git remote. Your git host never sees plaintext. Works with GitHub, GitLab, or self-hosted.</p>
     </div>
   </div>
-</section>
+</div>
 
-<section class="section" id="providers">
-  <div class="section-label">Providers</div>
-  <h2>49 integrations built in</h2>
-  <p>TOML-driven. Add any service in minutes. Community registry at github.com/zero-suite/providers.</p>
-  <div class="provider-pills">
-    <span class="pill cat-cost">Anthropic</span>
-    <span class="pill cat-cost">OpenAI</span>
-    <span class="pill cat-cost">Groq</span>
-    <span class="pill cat-cost">Gemini</span>
-    <span class="pill cat-cost">Mistral</span>
-    <span class="pill cat-cost">Together AI</span>
-    <span class="pill cat-cost">Replicate</span>
-    <span class="pill cat-cost">ElevenLabs</span>
-    <span class="pill cat-cost">Supabase</span>
-    <span class="pill cat-cost">Convex</span>
-    <span class="pill cat-deploy">Vercel</span>
-    <span class="pill cat-deploy">Coolify</span>
-    <span class="pill cat-deploy">Railway</span>
-    <span class="pill cat-deploy">Render</span>
-    <span class="pill cat-deploy">Fly.io</span>
-    <span class="pill cat-deploy">Netlify</span>
-    <span class="pill cat-deploy">Cloudflare Pages</span>
-    <span class="pill cat-deploy">DigitalOcean</span>
-    <span class="pill cat-deploy">Heroku</span>
-    <span class="pill cat-log">Axiom</span>
-    <span class="pill cat-log">Better Stack</span>
-    <span class="pill cat-log">Datadog</span>
-    <span class="pill cat-log">Sentry</span>
-    <span class="pill cat-monitor">Checkly</span>
-    <span class="pill cat-monitor">UptimeRobot</span>
-    <span class="pill cat-monitor">PostHog</span>
-    <span class="pill">+ 23 more</span>
-  </div>
-</section>
+<!-- Deploy Zero -->
+<div class="section" id="deploy">
+  <div class="label">02 — Deploy Zero</div>
+  <h2>Deploy from the terminal,<br>or let Claude do it</h2>
+  <p>Ten platforms. One CLI. The MCP server lets your AI coding agent trigger deploys directly — no browser required.</p>
 
-<section class="section" id="pricing">
-  <div class="section-label">Pricing</div>
-  <h2>Free forever.<br>Pay when your team grows.</h2>
-  <p>The vault, all 4 MCP servers, and the full CLI are free forever for personal use. No credit card required.</p>
-  <div class="pricing">
-    <div class="price-card">
-      <div class="price-name">Free</div>
-      <div class="price-amount">$0</div>
-      <div class="price-period">forever</div>
-      <ul class="price-features">
-        <li>Unlimited secrets</li>
-        <li>All 4 MCP servers</li>
-        <li>Framework-aware .env gen</li>
-        <li>Secret scanner</li>
-        <li>Vault health score</li>
-        <li>Stack bootstrap</li>
-        <li>Agent identity layer</li>
-      </ul>
-      <a href="https://github.com/zero-suite/zero/releases" class="btn btn-ghost">Download</a>
+  <div class="term">
+    <div class="term-bar"><span class="tb-r"></span><span class="tb-y"></span><span class="tb-g"></span><span class="term-title">deploy demo</span></div>
+    <div class="term-body"><pre><span class="tc"># CLI</span>
+<span class="tp">$</span> <span class="tk">deploy-zero deploy</span> --app subscription-exit-ai --provider coolify --env production
+<span class="ts">✓ Deploying commit a3f9b2c  →  production</span>
+<span class="ts">✓ Live in 48s  →  https://sub.badgpt.ai</span>
+
+<span class="tc"># Or ask Claude Code:</span>
+<span class="tc"># "Deploy to production on Coolify"</span>
+<span class="tc"># → deploy-zero-mcp handles auth, triggers build, reports back</span>
+
+<span class="tp">$</span> <span class="tk">deploy-zero rollback</span> --app badgpt-landing --provider vercel
+<span class="ts">✓ Rolled back to previous deployment</span></pre>
     </div>
-    <div class="price-card featured">
-      <div class="featured-badge">Most popular</div>
-      <div class="price-name">Pro</div>
-      <div class="price-amount"><sup>$</sup>59</div>
-      <div class="price-period">per year · or $149 lifetime</div>
-      <ul class="price-features">
-        <li>Everything in Free</li>
-        <li>Team sync (up to 5 people)</li>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Vercel</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Coolify</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Railway</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Render</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Fly.io</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Netlify</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Cloudflare Pages</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">DigitalOcean</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Heroku</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">GitHub Pages</span>
+  </div>
+</div>
+
+<!-- Spend Zero -->
+<div class="section" id="spend">
+  <div class="label">03 — Spend Zero</div>
+  <h2>Know what you're spending<br>on AI before it surprises you</h2>
+  <p>Tracks usage and cost across 15 AI and cloud providers. Ask Claude Code "how much have I spent this month?" and get a real answer.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="tb-r"></span><span class="tb-y"></span><span class="tb-g"></span><span class="term-title">spend demo</span></div>
+    <div class="term-body"><pre><span class="tp">$</span> <span class="tk">spend-zero</span> --month
+
+Provider         Model                      Cost
+<span class="tc">────────────────────────────────────────────────</span>
+<span class="tm">Anthropic</span>        claude-3-7-sonnet          <span class="ts">$4.82</span>
+<span class="tm">OpenAI</span>           gpt-4o                     <span class="ts">$1.20</span>
+<span class="tm">Groq</span>             llama-3.3-70b              <span class="ts">$0.08</span>
+<span class="tm">Supabase</span>         compute + storage           <span class="ts">$0.00</span>  <span class="tc">(free tier)</span>
+<span class="tc">────────────────────────────────────────────────</span>
+Total                                         <span class="ts">$6.10</span>
+Budget                                        $50.00
+<span class="ts">████░░░░░░░░░░░░░░░░░░░░░░░░░░</span> <span class="ts">12%</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- Log Zero -->
+<div class="section" id="logs">
+  <div class="label">04 — Log Zero</div>
+  <h2>All your app logs,<br>one place</h2>
+  <p>Tail and search logs across every platform you deploy to. The MCP server lets Claude Code read your logs to debug production issues.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="tb-r"></span><span class="tb-y"></span><span class="tb-g"></span><span class="term-title">log demo</span></div>
+    <div class="term-body"><pre><span class="tp">$</span> <span class="tk">log-zero tail</span> subscription-exit-ai --level error
+
+<span class="tc">03:15:22</span>  <span class="te">ERROR</span>  Plaid webhook: signature mismatch
+<span class="tc">03:18:01</span>  <span class="te">ERROR</span>  Convex mutation timeout after 5000ms
+<span class="tc">03:21:44</span>  <span class="te">ERROR</span>  Rate limit exceeded: user_2abc123
+
+<span class="tc"># Ask Claude Code: "Why is production throwing errors?"</span>
+<span class="tc"># → log-zero-mcp fetches last hour of errors across all your apps</span>
+<span class="tc"># → Claude reads them and explains what's wrong</span></pre>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Axiom</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Better Stack</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Datadog</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Sentry</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Vercel</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Railway</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Render</span>
+    <span style="font-size:13px;color:var(--muted);padding:5px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:6px">Papertrail</span>
+  </div>
+</div>
+
+<!-- Pricing -->
+<div class="section" id="pricing">
+  <div class="label">Pricing</div>
+  <h2>Free to use.<br>Pay for team features.</h2>
+  <p>The full CLI and all four MCP servers are free for personal use. No usage limits, no telemetry, no phone-home.</p>
+
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">forever</div>
+      <ul class="plan-features">
+        <li class="yes">Vault Zero — full CLI</li>
+        <li class="yes">All 4 MCP servers</li>
+        <li class="yes">Framework-aware .env gen</li>
+        <li class="yes">Secret scanner</li>
+        <li class="yes">Agent identity scoping</li>
+        <li class="yes">49 built-in providers</li>
+        <li>Team sync</li>
         <li>GitHub Secrets sync</li>
-        <li>vz watch (auto .env refresh)</li>
-        <li>Spend alerts &amp; budgets</li>
-        <li>Priority support</li>
+        <li>vz watch (auto refresh)</li>
       </ul>
-      <a href="https://klogw.lemonsqueezy.com/buy/pro" class="btn btn-primary">Get Pro</a>
+      <a href="https://github.com/zero-suite/zero/releases" class="plan-btn">Download</a>
     </div>
-    <div class="price-card">
-      <div class="price-name">Team</div>
-      <div class="price-amount"><sup>$</sup>149</div>
-      <div class="price-period">per year · or $249 lifetime</div>
-      <ul class="price-features">
-        <li>Everything in Pro</li>
-        <li>Up to 20 team members</li>
-        <li>RBAC (role-based access)</li>
-        <li>Slack spend alerts</li>
-        <li>Audit log export</li>
-        <li>Priority support</li>
+    <div class="plan hi">
+      <div class="plan-badge">Most popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$59</div>
+      <div class="plan-period">per year &nbsp;·&nbsp; or $149 lifetime</div>
+      <ul class="plan-features">
+        <li class="yes">Everything in Free</li>
+        <li class="yes">Team sync (up to 5 members)</li>
+        <li class="yes">GitHub Secrets sync</li>
+        <li class="yes">vz watch — auto .env refresh</li>
+        <li class="yes">Spend alerts &amp; budget limits</li>
+        <li class="yes">Priority support</li>
+        <li>RBAC</li>
+        <li>Slack alerts</li>
       </ul>
-      <a href="https://klogw.lemonsqueezy.com/buy/team" class="btn btn-ghost">Get Team</a>
+      <a href="https://klogw.lemonsqueezy.com" class="plan-btn primary">Get Pro</a>
     </div>
-  </div>
-</section>
-
-<div class="cta-section">
-  <h2>Ship faster.<br>Leak nothing.</h2>
-  <p>Free forever for personal use. Install in 30 seconds.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a href="#install" class="btn btn-primary" style="font-size:15px;padding:14px 28px">⬇ Install free</a>
-    <a href="https://github.com/zero-suite/zero" class="btn btn-ghost" style="font-size:15px;padding:14px 28px" target="_blank">View on GitHub</a>
+    <div class="plan">
+      <div class="plan-name">Team</div>
+      <div class="plan-price">$149</div>
+      <div class="plan-period">per year &nbsp;·&nbsp; or $249 lifetime</div>
+      <ul class="plan-features">
+        <li class="yes">Everything in Pro</li>
+        <li class="yes">Up to 20 members</li>
+        <li class="yes">Role-based access (RBAC)</li>
+        <li class="yes">Slack spend alerts</li>
+        <li class="yes">Audit log export</li>
+        <li class="yes">Priority support</li>
+      </ul>
+      <a href="https://klogw.lemonsqueezy.com" class="plan-btn">Get Team</a>
+    </div>
   </div>
 </div>
 
 <footer>
-  <div style="display:flex;align-items:center;gap:8px;font-weight:600;color:#94a3b8">
-    <div style="width:22px;height:22px;border-radius:5px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white">Z</div>
+  <div style="display:flex;align-items:center;gap:8px;font-weight:600">
+    <div style="width:22px;height:22px;border-radius:5px;background:var(--indigo);display:grid;place-items:center;font-size:11px;font-weight:900;color:#fff">Z</div>
     Zero Suite
   </div>
-  <div class="links">
-    <a href="https://github.com/zero-suite/zero">GitHub</a>
-    <a href="https://github.com/zero-suite/providers">Providers</a>
-    <a href="https://github.com/zero-suite/zero/releases">Releases</a>
-    <a href="mailto:support@zerosuite.app">Support</a>
+  <div>
+    <a href="https://github.com/zero-suite/zero" target="_blank">GitHub</a>
+    <a href="https://github.com/zero-suite/providers" target="_blank">Providers</a>
+    <a href="https://github.com/zero-suite/zero/releases" target="_blank">Releases</a>
+    <a href="mailto:hello@zerosuite.app">Contact</a>
   </div>
-  <div>© 2026 Zero Suite</div>
 </footer>
 
 </body>
