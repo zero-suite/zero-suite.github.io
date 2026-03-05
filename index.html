@@ -3,166 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zero Suite — Coming Soon</title>
-<meta name="description" content="Secrets, deploys, costs, and logs. One CLI. Coming soon.">
+<title>Zero Suite</title>
+<meta name="description" content="A CLI toolkit for developers running multiple products. Encrypted secrets, deploy management, AI cost tracking, and log tailing. Local-first.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
-  --black: #060608;
-  --surface: #0c0c10;
-  --line: #1a1a28;
-  --line2: #222233;
-  --text: #c8c8d8;
-  --sub: #5a5a7a;
-  --white: #eeeef4;
+  --bg: #07070d;
+  --fg: #e4e4f0;
+  --muted: #42425e;
+  --dim: #22223a;
   --indigo: #5b5ef4;
-  --green: #1db954;
+  --indigo-hover: #4a4de0;
+  --border: #18182c;
+  --input-border: #2a2a46;
 }
-html, body { height: 100%; }
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
 body {
-  background: var(--black);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* ─── Header ─── */
+header {
+  padding: 36px 48px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 40px 24px;
-  text-align: center;
+  gap: 10px;
 }
-.logo-mark {
-  width: 48px; height: 48px; border-radius: 12px;
-  background: var(--indigo);
-  display: grid; place-items: center;
-  font-size: 24px; font-weight: 900; color: #fff;
-  margin: 0 auto 32px;
-}
-h1 {
-  font-size: clamp(36px, 6vw, 60px);
-  font-weight: 800;
-  letter-spacing: -2.5px;
-  line-height: 1.05;
-  color: var(--white);
-  margin-bottom: 16px;
-}
-h1 em { font-style: normal; color: var(--sub); }
-p {
-  font-size: 17px;
-  color: var(--sub);
-  max-width: 400px;
-  line-height: 1.65;
-  margin-bottom: 40px;
-}
-.form {
-  display: flex;
-  gap: 8px;
-  max-width: 380px;
-  width: 100%;
-  margin: 0 auto 16px;
-}
-.form input {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--line2);
-  border-radius: 8px;
-  padding: 11px 14px;
-  font-size: 14px;
-  color: var(--white);
-  font-family: inherit;
-  outline: none;
-}
-.form input::placeholder { color: var(--sub); }
-.form input:focus { border-color: var(--indigo); }
-.form button {
-  background: var(--indigo);
-  border: none;
-  border-radius: 8px;
-  padding: 11px 20px;
+
+.wordmark {
   font-size: 14px;
   font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wordmark::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: var(--indigo);
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+/* ─── Main ─── */
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 48px;
+}
+
+.center {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ─── Eyebrow ─── */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+/* ─── Headline ─── */
+h1 {
+  font-size: clamp(44px, 8vw, 72px);
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1.02;
+  color: var(--fg);
+  margin-bottom: 24px;
+}
+
+h1 .break {
+  display: block;
+  color: #2e2e50;
+}
+
+/* ─── Subtext ─── */
+.sub {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+
+/* ─── Form ─── */
+.form-wrap {
+  margin-bottom: 14px;
+}
+
+form {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  background: #0f0f1c;
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+form:focus-within {
+  border-color: #3a3a60;
+}
+
+input[type="email"] {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--fg);
+  font-family: inherit;
+  outline: none;
+  min-width: 0;
+}
+
+input[type="email"]::placeholder {
+  color: var(--muted);
+}
+
+button[type="submit"] {
+  background: var(--indigo);
+  border: none;
+  padding: 14px 22px;
+  font-size: 13px;
+  font-weight: 600;
   color: #fff;
+  letter-spacing: -0.1px;
   cursor: pointer;
   font-family: inherit;
   white-space: nowrap;
-  transition: background 0.15s;
+  transition: background 0.12s;
+  flex-shrink: 0;
 }
-.form button:hover { background: #4a4de0; }
-.note { font-size: 12px; color: var(--sub); margin-bottom: 48px; }
-.suite {
+
+button[type="submit"]:hover {
+  background: var(--indigo-hover);
+}
+
+.form-note {
+  font-size: 12px;
+  color: var(--dim);
+  padding-left: 2px;
+}
+
+/* ─── Success ─── */
+.success-msg {
+  display: none;
+  font-size: 14px;
+  color: #3d9e6e;
+  padding: 14px 0 14px 2px;
+  font-weight: 500;
+}
+
+/* ─── Footer ─── */
+footer {
+  padding: 36px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+}
+
+.tools {
   display: flex;
   gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
-  border-top: 1px solid var(--line);
-  padding-top: 40px;
-  max-width: 600px;
-  width: 100%;
 }
-.suite-item { text-align: left; }
-.suite-n { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--sub); margin-bottom: 4px; }
-.suite-name { font-size: 13px; font-weight: 700; color: var(--white); }
-.suite-cmd { font-size: 11px; color: var(--indigo); font-family: 'SF Mono', monospace; }
-footer { margin-top: 48px; font-size: 12px; color: var(--sub); }
 
-/* success state */
-.success { display: none; font-size: 14px; color: var(--green); margin-bottom: 16px; }
+.tool {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: 0.3px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  transition: color 0.12s;
+}
+
+.footer-right {
+  font-size: 12px;
+  color: var(--dim);
+  letter-spacing: 0.2px;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 600px) {
+  header, footer {
+    padding: 28px 24px;
+  }
+
+  main {
+    padding: 32px 24px;
+    align-items: flex-start;
+  }
+
+  h1 {
+    letter-spacing: -2px;
+  }
+
+  form {
+    flex-direction: column;
+    border-radius: 10px;
+  }
+
+  input[type="email"] {
+    border-bottom: 1px solid var(--input-border);
+    border-radius: 0;
+  }
+
+  button[type="submit"] {
+    padding: 14px;
+  }
+
+  .tools {
+    display: none;
+  }
+}
 </style>
 </head>
 <body>
 
-<div class="logo-mark">Z</div>
+<header>
+  <div class="wordmark">Zero Suite</div>
+</header>
 
-<h1>Secrets, deploys, costs,<br><em>and logs.</em></h1>
-<p>Four developer tools in one CLI. Local-first and MCP-native for Claude Code and Cursor. Launching soon.</p>
+<main>
+  <div class="center">
+    <p class="eyebrow">Coming soon</p>
 
-<form class="form" onsubmit="notify(event)">
-  <input type="email" placeholder="your@email.com" required id="email">
-  <button type="submit">Notify me</button>
-</form>
-<div class="success" id="success">✓ You're on the list.</div>
-<p class="note">Early access. No spam.</p>
+    <h1>Your API keys<br>deserve better<br><span class="break">than .env files.</span></h1>
 
-<div class="suite">
-  <div class="suite-item">
-    <div class="suite-n">01</div>
-    <div class="suite-name">Vault Zero</div>
-    <div class="suite-cmd">vz · vault-zero-mcp</div>
-  </div>
-  <div class="suite-item">
-    <div class="suite-n">02</div>
-    <div class="suite-name">Deploy Zero</div>
-    <div class="suite-cmd">deploy-zero · mcp</div>
-  </div>
-  <div class="suite-item">
-    <div class="suite-n">03</div>
-    <div class="suite-name">Spend Zero</div>
-    <div class="suite-cmd">spend-zero · mcp</div>
-  </div>
-  <div class="suite-item">
-    <div class="suite-n">04</div>
-    <div class="suite-name">Log Zero</div>
-    <div class="suite-cmd">log-zero · mcp</div>
-  </div>
-</div>
+    <p class="sub">
+      A CLI toolkit for developers running multiple products —
+      encrypted secrets vault, deploy management, AI cost tracking,
+      and log tailing. Local-first. MCP-native for Claude Code and Cursor.
+    </p>
 
-<footer>zerosuite.app</footer>
+    <div class="form-wrap">
+      <form id="waitlist" onsubmit="handleSubmit(event)">
+        <input
+          type="email"
+          id="email"
+          placeholder="your@email.com"
+          autocomplete="email"
+          required
+        >
+        <button type="submit">Get early access</button>
+      </form>
+      <div class="success-msg" id="success">You're on the list. We'll be in touch.</div>
+    </div>
+
+    <p class="form-note">Early access · No spam · Unsubscribe anytime</p>
+  </div>
+</main>
+
+<footer>
+  <div class="tools">
+    <span class="tool">vault-zero</span>
+    <span class="tool">deploy-zero</span>
+    <span class="tool">spend-zero</span>
+    <span class="tool">log-zero</span>
+  </div>
+  <div class="footer-right">zerosuite.app</div>
+</footer>
 
 <script>
-function notify(e) {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  // Store locally for now — swap in a Resend/Supabase call when ready
-  fetch('https://api.zerosuite.app/waitlist', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  }).catch(() => {});
-  document.querySelector('.form').style.display = 'none';
-  document.querySelector('.note').style.display = 'none';
-  document.getElementById('success').style.display = 'block';
-}
+  function handleSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) return;
+
+    // Fire and forget — swap in real endpoint when ready
+    fetch('https://api.zerosuite.app/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'landing' })
+    }).catch(() => {});
+
+    document.getElementById('waitlist').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    document.querySelector('.form-note').style.display = 'none';
+  }
 </script>
 
 </body>
